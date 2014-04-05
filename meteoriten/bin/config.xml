@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<Moviesandbox>
+
+    
+    <Rendersettings
+
+
+      WindowSizeX="3840"
+      WindowSizeY="800"
+      ScreenSizeX="3840"
+      ScreenSizeY="800"
+      bRenderStereo="0"
+
+      bFullScreen="0"
+
+      BackgroundTex="NULL"
+
+      bDrawLighting="0"
+      bMultisample="0"
+      numSamples="1"
+
+      ShadowSize="768"
+      SceneSize="768"
+
+      MouseSensitivity="0.04"
+      MoveSpeed="8.0"
+      FOV="45"
+      StartSceneFile="blank.scene">
+    </Rendersettings>
+
+    <Library Library="basic.library" />
+
+</Moviesandbox>

@@ -1,0 +1,4 @@
+ofxOpenCv
+ofxOsc
+ofxThreadedImageLoader
+ofxARToolkitPlus
