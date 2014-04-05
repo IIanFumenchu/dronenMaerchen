@@ -52,7 +52,7 @@ class testApp : public ofBaseApp, public Actor{
         void accumulateMask();
         void postProcessMask();
 
-        void drawGrid();
+        void drawGrid(int dimSquare);
         void drawFill(int x, int y);
         void drawConnect(int x1, int y1, int x2, int y2);
 
