@@ -1,49 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="release" />
-	<File name="src\testApp.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="416" topLine="10" />
-		</Cursor>
-	</File>
 	<File name="src\testApp.cpp" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="10529" topLine="41" />
+			<Cursor1 position="32516" topLine="0" />
 		</Cursor>
 		<Folding>
+			<Collapse line="6" />
 			<Collapse line="21" />
 			<Collapse line="145" />
 			<Collapse line="167" />
 			<Collapse line="190" />
-			<Collapse line="217" />
-			<Collapse line="252" />
 			<Collapse line="327" />
 			<Collapse line="351" />
 			<Collapse line="369" />
 			<Collapse line="387" />
 			<Collapse line="403" />
-			<Collapse line="413" />
-			<Collapse line="422" />
-			<Collapse line="661" />
-			<Collapse line="677" />
-			<Collapse line="779" />
-			<Collapse line="809" />
-			<Collapse line="965" />
-			<Collapse line="1001" />
-			<Collapse line="1203" />
-			<Collapse line="1230" />
-			<Collapse line="1291" />
-			<Collapse line="1299" />
-			<Collapse line="1304" />
-			<Collapse line="1310" />
-			<Collapse line="1316" />
-			<Collapse line="1322" />
-			<Collapse line="1363" />
+			<Collapse line="414" />
 		</Folding>
+	</File>
+	<File name="..\..\..\addons\msbOFCore\renderer.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4763" topLine="306" />
+		</Cursor>
 	</File>
 	<File name="..\..\..\addons\msbOFCore\actor.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="2504" topLine="61" />
+		</Cursor>
+	</File>
+	<File name="src\testApp.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1163" topLine="47" />
+		</Cursor>
+	</File>
+	<File name="..\..\..\addons\msbOFCore\actor.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="16135" topLine="630" />
+		</Cursor>
+	</File>
+	<File name="..\..\..\addons\msbOFCore\msbButtons\textInputButton.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="412" topLine="0" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

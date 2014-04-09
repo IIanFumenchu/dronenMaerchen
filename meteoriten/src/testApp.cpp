@@ -24,11 +24,11 @@ void testApp::setup(){
     //ofSetFrameRate(25);
 
 
-    int offsetX=300;
-    int offsetY=300;
+/*    int offsetX=300;
+    int offsetY=300;*/
 
 
-    xP[0]=0+offsetX;
+   /* xP[0]=0+offsetX;
     xP[1]=1280.0-offsetX;
     xP[2]=1280-offsetX;
     xP[3]=0+offsetX;
@@ -53,7 +53,7 @@ void testApp::setup(){
     yC[0]=0;
     yC[1]=0;
     yC[2]=480;
-    yC[3]=480;
+    yC[3]=480;*/
 
     currentFrame=0;
 
@@ -109,7 +109,7 @@ void testApp::setup(){
     for (int i=0;i<MAXPUPPE;i++){
         //set up a buffer as big as BUFFER
         for (int b=0;b<TRACKBUFFER;b++){
-            trackPointBuffer[i].push_back(Vector3f(0,0,0));
+            trackPointBuffer [i].push_back(Vector3f(0,0,0));
         }
     }
 
@@ -129,8 +129,8 @@ void testApp::setup(){
 
 
     //stage simulation
-    stageImage.loadImage("stage.tga");
-    mockup.loadMovie("mockup.mp4");
+    /*stageImage.loadImage("stage.tga");
+    mockup.loadMovie("mockup.mp4");*/
 
     //stageImage.getTextureReference().texData.textureTarget=GL_TEXTURE_2D;
 
@@ -167,14 +167,14 @@ void testApp::msbSetup(){
 
 void testApp::registerProperties(){
 
-    createMemberID("XP",&xP,this);
+    /*createMemberID("XP",&xP,this);
     createMemberID("YP",&yP,this);
 
     createMemberID("XP2",&xP2,this);
     createMemberID("YP2",&yP2,this);
 
     createMemberID("XC",&xC,this);
-    createMemberID("YC",&yC,this);
+    createMemberID("YC",&yC,this);*/
 
     createMemberID("TRACKDISTANCE",&trackDistance,this);
     createMemberID("THRESHOLD",&threshold,this);
@@ -217,21 +217,21 @@ void testApp::loadSettings(){//load settings from XML files
 //--------------------------------------UPDATE FUNCTIONS
 void testApp::update(){
 
-    rectSize=lineWidth*64;
+    rectSize= lineWidth *64;
 
     currentFrame++;
     kinect.update();
     renderer->update();
-    mockup.update();
+    //mockup.update();
 
-    rgbaFbo.begin();
+    /*rgbaFbo.begin();
         ofClear(0,0,0,0);
 		if (bDrawGrid)
             drawGrid(100);
-    rgbaFbo.end();
+    rgbaFbo.end();*/
 
-    if (bAccumulateMask)
-        accumulateMask();
+    /*if (bAccumulateMask)
+        accumulateMask();*/
 
     //buffer image
     if(currentFrame%imageBuffer==0){
@@ -240,7 +240,7 @@ void testApp::update(){
         ocvBufferedImage.setFromPixels(kinect.depthPixels,640,480);
     }else{
         //build image
-        accumulateImage();
+        //accumulateImage();
     }
 
 
@@ -349,7 +349,7 @@ void testApp::applyMask(){
 
 }
 
-void testApp::accumulateMask(){
+/*void testApp::accumulateMask(){
 
 
 pixelBufferOne=kinect.depthPixels;
@@ -365,9 +365,9 @@ for (int i=0;i<640*480;i++){
 ocvMask.setFromPixels(pixelBufferTwo, 640,480);
 //ocvDiff.setFromPixels(ocvMask.getPixels(),640,480);
 
-}
+}*/
 
-void testApp::accumulateImage(){
+/*void testApp::accumulateImage(){
 
     pixelBufferOne=kinect.depthPixels;
     pixelBufferTwo=ocvBufferedImage.getPixels();
@@ -381,11 +381,11 @@ void testApp::accumulateImage(){
     ocvBufferedImage.setFromPixels(pixelBufferTwo, 640,480);
     //ocvImage.setFromPixels(kinect.depthPixels, 640,480);
 
-}
+}*/
 
 
 //--------------------------------------DRAW FUNCTIONS
-void testApp::drawGrid(int dimSquare){//draw grid with cell dimension == "dimSquare"
+/*void testApp::drawGrid(int dimSquare){//draw grid with cell dimension == "dimSquare"
 
     ofSetHexColor(0xffffff);
     ofNoFill();
@@ -399,8 +399,9 @@ void testApp::drawGrid(int dimSquare){//draw grid with cell dimension == "dimSqu
             }
         }
 
-}
+}*/
 
+/*
 void testApp::drawFill(int x, int y){
 
     ofSetHexColor(0xffffff);
@@ -409,46 +410,47 @@ void testApp::drawFill(int x, int y){
     //ofRect(x,y,rectSize,rectSize);
     ofRect(x-threshold,y-threshold,threshold*2.0,threshold*2.0);
 
-}
+}*/
 
-void testApp::drawConnect(int x1, int y1, int x2, int y2){
+/*void testApp::drawConnect(int x1, int y1, int x2, int y2){
 
     ofSetHexColor(0xffffff);
     ofFill();
     ofSetLineWidth(lineWidth);
     ofLine(x1,y1,x2,y2);
 
-}
+}*/
 
 void testApp::draw(){
 
-    ofClear(0,0,0,255);
-    ofNoFill();
+    ofClear(0,0,0,255); //screen black
+    //ofNoFill();
 
     //glTexEnvf(GL_TEXTURE_FILTER_CONTROL_EXT, GL_TEXTURE_LOD_BIAS_EXT, slBut->sliderValue * 10.0);
 
     glDisable(GL_LIGHTING);
     glDisable(GL_DEPTH_TEST);
 
-    ofSetLineWidth(1.0);
+    //ofSetLineWidth(1.0);
 
     //stageImage.draw(mainW,0);
     //kinect.draw(1920,0);
 
-    ofEnableAlphaBlending();
+    //ofEnableAlphaBlending(); //ENABLE DISABLE ALPHABLENDING
+    //ofDisableAlphaBlending();
 
 
-    ofPushMatrix();
+    /*ofPushMatrix();
 
         ofSetHexColor(0xffff00);
         ofRect(100,800,320,200);
 
         ofSetHexColor(0xffffff);
-        ofTranslate(100,800,0);
+        ofTranslate(100,100,0);
         ofScale(0.25,0.25,0.25);
         rgbaFbo.draw(0,0);
 
-    ofPopMatrix();
+    ofPopMatrix();*/
 
     /*
     mX=  (mouseX - 100)*4;
@@ -456,30 +458,34 @@ void testApp::draw(){
     */
 
     ofPushMatrix();
-    ofTranslate(600,100);
-    ofScale(0.5,0.5,1.0);
-    ocvImage.draw(0,0);
-    contourFinder.draw();
-
+        ofTranslate(600,100);
+        ofScale(0.75,0.75,0.75);
+        ocvImage.draw(0,0);
+        contourFinder.draw();
     ofPopMatrix();
 
             //was passiert hier eigentlich?
 
     //Draw Camera and Camtransform
 
-    if (bAccumulateMask)
-        ocvMask.draw(1000,500);
+    /*if (bAccumulateMask)
+        ocvMask.draw(800,500);
     else
-        ocvDiff.draw(1000,500);
+        ocvDiff.draw(800,500);*/
 
-    kinect.draw(1000,0);
+    ofPushMatrix();
+        ofTranslate(50,100);
+        ofScale(0.75,0.75,0.75);
+        kinect.draw(0,0);
+
+    ofPopMatrix();
 
 
     //calculate Buffered value
-    Vector3f trackPoint[MAXPUPPE];
+    //Vector3f trackPoint[MAXPUPPE];
 
     //for all trackPoints
-    for (int i=0;i<MAXPUPPE;i++){
+    /*for (int i=0;i<MAXPUPPE;i++){
         //add up all Buffered values
         for (int b=0;b<TRACKBUFFER;b++){
             trackPoint[i]+=trackPointBuffer[i][b]/float(TRACKBUFFER);
@@ -491,9 +497,9 @@ void testApp::draw(){
         char buf[5];
         sprintf(buf,"%d",i);
         ofDrawBitmapString(buf,trackPoint[i].x+1000,trackPoint[i].y,10);
-    }
+    }*/
 
-    ofPushMatrix();
+    /*ofPushMatrix();
         ofTranslate(100,100);
         ofScale(0.5,0.5,0.5);
 
@@ -520,10 +526,10 @@ void testApp::draw(){
             }
             ofPopMatrix();
 
-    ofPopMatrix();
+    ofPopMatrix();*/
 
 
-    for (int i=0;i<MAXPUPPE;i++){
+    /*for (int i=0;i<MAXPUPPE;i++){
 
         ofPushMatrix();
             ofTranslate(100,100);
@@ -546,7 +552,7 @@ void testApp::draw(){
                 //drawFill( (mX/128)*128,(mY/128)*128);
                 trackPoint[i].x*=4.0;
                 trackPoint[i].y*=3.0;
-                drawFill( trackPoint[i].x, trackPoint[i].y );
+                //drawFill( trackPoint[i].x, trackPoint[i].y );
                 //draw connections
                 if (connectors[i]->color==Vector4f(0.5,0,0,1)){
                     for (int j=0;j<MAXPUPPE;j++){
@@ -568,17 +574,17 @@ void testApp::draw(){
                 }
 
             rgbaFbo.end();
-    }
+    }*/
 
 
-    ofNoFill();
+    //ofNoFill();
 
 
     //DRAW ALL TEH GRIDZ!!!11!
 
 
     //Draw first Projection Grid
-    ofPushMatrix();
+    /*ofPushMatrix();
 
         //Draw tiny red rectangle in which we draw first Projection Grid
         ofSetHexColor(0xff0000);
@@ -649,11 +655,11 @@ void testApp::draw(){
         ofPopMatrix();
 
 
-    ofPopMatrix();
+    ofPopMatrix();*/
 
-    renderer->backgroundColor.a=0;
+    renderer->backgroundColor.a=0; //what is this?
 
-    renderer->draw();
+    renderer->draw(); //draw the buttons
 
 }
 
@@ -684,12 +690,6 @@ void testApp::trigger(Actor* other){
 
     }
 
-    if (other->name=="stefano"){
-
-        cout << "hippie!!!" << endl;
-
-    }
-
     if (other->name=="threshold"){
         slBut->sliderValue=threshold/255.0;
     }
@@ -701,7 +701,7 @@ void testApp::trigger(Actor* other){
 
     //erstes Projektionsgrid
 
-    if (other->name=="ecke1"){
+   /* if (other->name=="ecke1"){
         xP[0]=other->location.x-mainW+16;
         yP[0]=other->location.y+16;
     }
@@ -771,7 +771,7 @@ void testApp::trigger(Actor* other){
     if (other->name=="ecke4c"){
         xC[3]=other->location.x-1000+16;
         yC[3]=other->location.y+16;
-    }
+    }*/
 
     checkConnections(other);
 
@@ -811,11 +811,6 @@ void testApp::interfaceSetup(){
     //Adding MSB content
     BasicButton *but;
 
-    cornerSetup();
-
-    //anderes
-
-
     but= new TextInputButton();
     but->name="threshold";
     but->buttonProperty="THRESHOLD";
@@ -844,7 +839,7 @@ void testApp::interfaceSetup(){
     but->setup();
     renderer->buttonList.push_back(but);
 
-    but= new TextInputButton();
+    /*but= new TextInputButton();
     but->name="transformX";
     but->buttonProperty="XP";
     but->bDrawName=true;
@@ -870,14 +865,14 @@ void testApp::interfaceSetup(){
     but->parent=this;
     but->color=Vector4f(0.5,0.5,0.5,1.0);
     but->setup();
-    renderer->buttonList.push_back(but);
+    renderer->buttonList.push_back(but);*/
 
     but= new TextInputButton();
     but->name="dilate";
     but->buttonProperty="DILATEAMOUNT";
     but->bDrawName=true;
     but->tooltip="";
-    but->setLocation(Vector3f(500,790,0));
+    but->setLocation(Vector3f(900,900,0));
     but->scale.x=130;
     but->scale.y=12;
     but->textureID="icon_flat";
@@ -891,7 +886,7 @@ void testApp::interfaceSetup(){
     but->buttonProperty="ERODEAMOUNT";
     but->bDrawName=true;
     but->tooltip="";
-    but->setLocation(Vector3f(500,810,0));
+    but->setLocation(Vector3f(700,790,0));
     but->scale.x=130;
     but->scale.y=12;
     but->textureID="icon_flat";
@@ -905,7 +900,7 @@ void testApp::interfaceSetup(){
     but->buttonProperty="BLURAMOUNT";
     but->bDrawName=true;
     but->tooltip="";
-    but->setLocation(Vector3f(500,830,0));
+    but->setLocation(Vector3f(900,790,0));
     but->scale.x=130;
     but->scale.y=12;
     but->textureID="icon_flat";
@@ -998,7 +993,7 @@ void testApp::connectSetup(){
         connected.push_back(but);
     }
 }
-
+/*
 void testApp::cornerSetup(){
 
     BasicButton *but;
@@ -1198,12 +1193,12 @@ void testApp::cornerSetup(){
     renderer->buttonList.push_back(but);
 
 }
-
+*/
 
 //---------------------------------------INPUT FUNCTIONS
 void testApp::keyPressed(int key){
 
-
+/*
         if (key=='w'){
             xP2[selectedPoint-1]+=0.0;
             yP2[selectedPoint-1]-=0.5;
@@ -1222,7 +1217,7 @@ void testApp::keyPressed(int key){
         if (key=='d'){
             xP2[selectedPoint-1]+=0.5;
             yP2[selectedPoint-1]-=0.0;
-        }
+        }*/
 
 
     input->normalKeyDown(key,mouseX,mouseY);
@@ -1235,6 +1230,7 @@ void testApp::keyReleased(int key){
     if (input->bTextInput)
         return;
 
+/*
     if (key=='1'){
         selectedPoint=1;
     }
@@ -1249,7 +1245,7 @@ void testApp::keyReleased(int key){
 
     if (key=='4'){
         selectedPoint=4;
-    }
+    }*/
 
     if (key=='m'){
         //start mask accumulation
@@ -1262,16 +1258,16 @@ void testApp::keyReleased(int key){
             postProcessMask();
         }
     }
-
+/*
     if (key=='o'){   //mockup
         bMockup=!bMockup;
         if (bMockup)
             mockup.play();
-    }
+    }*/
 
-    if (key=='g'){
+    /*if (key=='g'){
         bDrawGrid=!bDrawGrid;
-    }
+    }*/
 
     //Reset trackPointBuffers
     if (key=='r'){

@@ -36,7 +36,7 @@ class testApp : public ofBaseApp, public Actor{
 
 		void interfaceSetup();
 
-		void cornerSetup();
+		//void cornerSetup();
 		void connectSetup();
 
 		//from msbOFCore
@@ -48,13 +48,13 @@ class testApp : public ofBaseApp, public Actor{
 
         void trackPoints();
         void applyMask();
-        void accumulateImage();
-        void accumulateMask();
+        //void accumulateImage();
+        //void accumulateMask();
         void postProcessMask();
 
-        void drawGrid(int dimSquare);
-        void drawFill(int x, int y);
-        void drawConnect(int x1, int y1, int x2, int y2);
+       // void drawGrid(int dimSquare);
+       // void drawFill(int x, int y);
+        // void drawConnect(int x1, int y1, int x2, int y2);
 
 		void findHomography(ofPoint src[4], ofPoint dst[4], float homography[16]);
 		void gaussian_elimination(float *input, int n);
@@ -76,14 +76,14 @@ class testApp : public ofBaseApp, public Actor{
 
         ofImage stageImage;
 
-        Vector4f xP;
+        /*Vector4f xP;
         Vector4f yP;
 
         Vector4f xP2;
         Vector4f yP2;
 
         Vector4f xC;
-        Vector4f yC;
+        Vector4f yC;*/
 
 
         Matrix4f pMat1;
