@@ -2571,12 +2571,12 @@
 
 1396700748 source:c:\of_v0.8.0_win_cb_release\apps\dronenmaerchen\meteoriten\icon.rc
 
-1396700748 source:c:\of_v0.8.0_win_cb_release\apps\dronenmaerchen\meteoriten\src\main.cpp
+1397230354 source:c:\of_v0.8.0_win_cb_release\apps\dronenmaerchen\meteoriten\src\main.cpp
 	"ofMain.h"
 	"testApp.h"
 	"ofAppGlutWindow.h"
 
-1397001174 c:\of_v0.8.0_win_cb_release\apps\dronenmaerchen\meteoriten\src\testapp.h
+1397247005 c:\of_v0.8.0_win_cb_release\apps\dronenmaerchen\meteoriten\src\testapp.h
 	"ofxOpenCv.h"
 	"ofxKinect.h"
 	"ofMain.h"
@@ -2598,6 +2598,6 @@
 	"ofTypes.h"
 	"ofPixels.h"
 
-1397001121 source:c:\of_v0.8.0_win_cb_release\apps\dronenmaerchen\meteoriten\src\testapp.cpp
+1397246725 source:c:\of_v0.8.0_win_cb_release\apps\dronenmaerchen\meteoriten\src\testapp.cpp
 	"testApp.h"
 

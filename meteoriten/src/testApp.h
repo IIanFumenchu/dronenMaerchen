@@ -16,8 +16,10 @@
 
 // Uncomment this to use a camera instead of a video file
 #define CAMERA_CONNECTED
-#define SCREENRESX 1920+1920+1280
-#define SCREENRESY 1080
+//#define SCREENRESX 1920+1920+1280
+//#define SCREENRESY 1080
+#define SCREENRESX 1366
+#define SCREENRESY 768
 #define MAXPUPPE 10
 #define TRACKBUFFER 30
 
@@ -34,17 +36,17 @@ class testApp : public ofBaseApp, public Actor{
 		void update();
 		void draw();
 
-		void interfaceSetup();
+		//void interfaceSetup();
 
 		//void cornerSetup();
-		void connectSetup();
+		//void connectSetup();
 
 		//from msbOFCore
-		void msbSetup();
-		void registerProperties();
-		void trigger(Actor* other);
-		void checkConnections(Actor* other);
-        void loadSettings();
+		//void msbSetup();
+		//void registerProperties();
+		//void trigger(Actor* other);
+		//void checkConnections(Actor* other);
+        //void loadSettings();
 
         void trackPoints();
         void applyMask();
@@ -56,8 +58,8 @@ class testApp : public ofBaseApp, public Actor{
        // void drawFill(int x, int y);
         // void drawConnect(int x1, int y1, int x2, int y2);
 
-		void findHomography(ofPoint src[4], ofPoint dst[4], float homography[16]);
-		void gaussian_elimination(float *input, int n);
+		//void findHomography(ofPoint src[4], ofPoint dst[4], float homography[16]);
+		//void gaussian_elimination(float *input, int n);
 
 		void keyPressed  (int key);
 		void keyReleased(int key);
@@ -93,13 +95,13 @@ class testApp : public ofBaseApp, public Actor{
         int mX;
         int mY;
 
-        //Resolution second & third "window"
+        /*//Resolution second & third "window"
         int mainW;
         int mainH;
         int firstW;
         int firstH;
         int secondW;
-        int secondH;
+        int secondH;*/
 
         int currentFrame;
 
@@ -114,7 +116,7 @@ class testApp : public ofBaseApp, public Actor{
 
         ofxCvContourFinder contourFinder;
 
-        ofVideoPlayer   mockup;
+        //ofVideoPlayer   mockup;
 
         unsigned char*               pixelBufferOne;
         unsigned char*               pixelBufferTwo;
@@ -140,11 +142,11 @@ class testApp : public ofBaseApp, public Actor{
 
         //Vector3f trackPoint[MAXPUPPE];
         vector<Vector3f> trackPointBuffer[MAXPUPPE];
-        vector<BasicButton*>  connectors;
-        vector<BasicButton*>  connected;
+        /*vector<BasicButton*>  connectors;
+        vector<BasicButton*>  connected;*/
 
 
-        SliderButton* slBut;
+        //SliderButton* slBut;
 };
 
 #endif
