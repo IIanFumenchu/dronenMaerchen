@@ -77,19 +77,14 @@ void testApp::setup(){
 
     rgbaFbo.end();
 
+    valueNumber.loadFont("verdana.ttf", 25);
+
 
     //stage simulation
     /*stageImage.loadImage("stage.tga");
     mockup.loadMovie("mockup.mp4");*/
 
     //stageImage.getTextureReference().texData.textureTarget=GL_TEXTURE_2D;
-
-    //msbSetup();
-
-    //loadSettings();
-
-    //interfaceSetup();
-
 
 }
 
@@ -100,28 +95,18 @@ void testApp::update(){
 
     currentFrame++;
     kinect.update();
-    //renderer->update();
-    //mockup.update();
 
-    /*rgbaFbo.begin();
-        ofClear(0,0,0,0);
-		if (bDrawGrid)
-            drawGrid(100);
-    rgbaFbo.end();*/
 
     /*if (bAccumulateMask)
         accumulateMask();*/
 
     //buffer image
-    if(currentFrame%imageBuffer==0){
+    //if(currentFrame%imageBuffer==0){
         //reset image to be accumulated
-        ocvImage.setFromPixels(ocvBufferedImage.getPixels(),640,480);
-        ocvBufferedImage.setFromPixels(kinect.depthPixels,640,480);
-    }else{
-        //build image
-        //accumulateImage();
-    }
-
+        //ocvImage.setFromPixels(ocvBufferedImage.getPixels(),640,480);
+        //ocvBufferedImage.setFromPixels(kinect.depthPixels,640,480);
+    //}
+    ocvImage.setFromPixels(kinect.depthPixels,640,480);
 
     //do all the stuff all the time
     applyMask();
@@ -134,16 +119,16 @@ void testApp::trackPoints(){
     Vector3f trackPoint;
 
         //debug - use mouse coordinates!
-    /*
 
-        trackPoint.x=mX-1000;
+/*
+        trackPoint.x=mX;
         trackPoint.y=mY;
 
         if (trackPointBuffer[0].size()== TRACKBUFFER)
             trackPointBuffer[0].pop_back();
 
         trackPointBuffer[0].insert(trackPointBuffer[0].begin(),trackPoint);
-    */
+*/
 
 
     //fill Track Point Buffer
@@ -303,7 +288,7 @@ void testApp::draw(){
 
     //draw the grayscale kinect frame
     ofPushMatrix();
-        ofTranslate(600,100);
+        ofTranslate(520,70);
         ofScale(0.75,0.75,0.75);
         ocvImage.draw(0,0);
         contourFinder.draw();
@@ -319,9 +304,23 @@ void testApp::draw(){
         ocvDiff.draw(800,500);*/
 
     ofPushMatrix();
-        ofTranslate(50,100);
+        ofTranslate(20,70);
         ofScale(0.75,0.75,0.75);
         kinect.draw(0,0);
+    ofPopMatrix();
+
+    //draw the mask after postProduction
+    ofPushMatrix();
+        ofTranslate(480+520+10,70); //TODO variable for positions
+        ofScale(0.50,0.50,0.50);
+        ocvDiff.draw(0,0);
+    ofPopMatrix();
+
+    //draw Mask
+    ofPushMatrix();
+        ofTranslate(480+520+10,240+70+10);//TODO here like :314
+        ofScale(0.50,0.50,0.50);
+        ocvMask.draw(0,0);
     ofPopMatrix();
 
 
@@ -422,6 +421,11 @@ void testApp::draw(){
 
 
     //ofNoFill();
+    sprintf(valueStr, "erode 1[-]: %i :[+]2", erodeAmount);
+    valueNumber.drawString(valueStr, 20,560);
+    sprintf(valueStr, "dilate 3[-]: %i :[+]4", dilateAmount);
+    valueNumber.drawString(valueStr, 20,600);
+
 }
 
 
@@ -488,6 +492,23 @@ void testApp::keyReleased(int key){
             }
         }
 
+    }
+
+    if (key=='4'){
+        dilateAmount++;
+        postProcessMask();
+    }
+    if (key=='2'){
+        erodeAmount++;
+        postProcessMask();
+    }
+    if (key=='3'){
+        dilateAmount--;
+        postProcessMask();
+    }
+    if (key=='1'){
+        erodeAmount--;
+        postProcessMask();
     }
 
 }

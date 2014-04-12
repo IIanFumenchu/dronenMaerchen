@@ -145,6 +145,10 @@ class testApp : public ofBaseApp, public Actor{
         /*vector<BasicButton*>  connectors;
         vector<BasicButton*>  connected;*/
 
+        ofTrueTypeFont valueNumber;
+        char valueStr[255]; // an array of chars
+
+
 
         //SliderButton* slBut;
 };

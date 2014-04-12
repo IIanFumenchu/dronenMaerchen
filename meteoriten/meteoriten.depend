@@ -2576,7 +2576,7 @@
 	"testApp.h"
 	"ofAppGlutWindow.h"
 
-1397247005 c:\of_v0.8.0_win_cb_release\apps\dronenmaerchen\meteoriten\src\testapp.h
+1397334055 c:\of_v0.8.0_win_cb_release\apps\dronenmaerchen\meteoriten\src\testapp.h
 	"ofxOpenCv.h"
 	"ofxKinect.h"
 	"ofMain.h"
@@ -2598,6 +2598,6 @@
 	"ofTypes.h"
 	"ofPixels.h"
 
-1397246725 source:c:\of_v0.8.0_win_cb_release\apps\dronenmaerchen\meteoriten\src\testapp.cpp
+1397261709 source:c:\of_v0.8.0_win_cb_release\apps\dronenmaerchen\meteoriten\src\testapp.cpp
 	"testApp.h"
 
