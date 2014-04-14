@@ -56,14 +56,15 @@ void testApp::setup(){
 
     //set up tracking buffers
     //for each Puppet potentially to be tracked
-    for (int i=0;i<MAXPUPPE;i++){
+    for (int i=0;i<NMAXBLOBS;i++){
         //set up a buffer as big as BUFFER
-        for (int b=0;b<TRACKBUFFER;b++){
+        for (int b=0;b<TRACKBUFFER;b++){// ???
             trackPointBuffer [i].push_back(Vector3f(0,0,0));
         }
     }
 
-
+    minDimBlob = 100;
+    maxDimBlob = 200000;
     //ofSetFrameRate(25);
 
 
@@ -118,52 +119,40 @@ void testApp::trackPoints(){
 
     Vector3f trackPoint;
 
-        //debug - use mouse coordinates!
+    ocvImage.threshold(threshold,false); //TODO for blob detection is better grayscale or B/W?
 
-/*
-        trackPoint.x=mX;
-        trackPoint.y=mY;
+    contourFinder.findContours(ocvImage,minDimBlob,maxDimBlob,NMAXBLOBS,false,true);
 
-        if (trackPointBuffer[0].size()== TRACKBUFFER)
-            trackPointBuffer[0].pop_back();
-
-        trackPointBuffer[0].insert(trackPointBuffer[0].begin(),trackPoint);
-*/
-
-
-    //fill Track Point Buffer
-
-
-    //ocvImage.threshold(threshold,true);
-    contourFinder.findContours(ocvImage,200,200000,MAXPUPPE,false,true);
     for(int i = 0; i < contourFinder.nBlobs; i++) {
-        mX=contourFinder.blobs[i].centroid.x *(1280.0f/640.0f);
-        mY=contourFinder.blobs[i].centroid.y *(800.0/480.0f);
+        //mX=contourFinder.blobs[i].centroid.x *(1280.0f/640.0f);
+        //mY=contourFinder.blobs[i].centroid.y *(800.0/480.0f);
 
-        //find point that is highest in y
+        //find the lowest point of each Blob
         float maxim=0;  //maximum y
-        int myMin=0;    //point that is highest in y
+        int myMin=0;    //point that is lowest in y
 
         for (int p=0;p<contourFinder.blobs[i].nPts;p++){
-            if (contourFinder.blobs[i].pts[p].y>maxim){
+            if (contourFinder.blobs[i].pts[p].y<maxim){
                     myMin=p;
                     maxim=contourFinder.blobs[i].pts[p].y;
             }
         }
+
         trackPoint.x=contourFinder.blobs[i].pts[myMin].x;
         trackPoint.y=contourFinder.blobs[i].pts[myMin].y;
+
         //if we have buffered values, delete the oldest one
-
         //now we must associate the currently tracked point with the closest point we already have
-
         //compare location, find closest already tracked point
 
         float shortestDist=trackDistance;
 
         int currentlyClosestBuffer=-1;  //set to -1, if it stays there, we probably have a new puppet to track!
 
-        for (int l=0;l<MAXPUPPE;l++){
-            float dist=(trackPoint-trackPointBuffer[l][0]).length();
+        //the Blob search the closest point in the buffer
+        //or the first empty buffer position? //TODO right?
+        for (int l=0;l<NMAXBLOBS;l++){
+            float dist=(trackPoint-trackPointBuffer[l][0]).length();//TODO why here a float declaration?
             //if we are close to a buffered point, use that one
             if (dist<shortestDist){
                 currentlyClosestBuffer=l;
@@ -174,16 +163,17 @@ void testApp::trackPoints(){
             if (trackPointBuffer[l][0].length()==0 && currentlyClosestBuffer==-1){
                 currentlyClosestBuffer=l;
                 shortestDist=0;
-                l=MAXPUPPE; //break out of for-loop
+                l=NMAXBLOBS; //break out of for-loop
             }
         }
 
-        //if we haven't found anything...
+        //if we have found something...
         if (currentlyClosestBuffer>-1){
             //if we have buffered values, delete the oldest one
+            //and insert the current Blob position into buffer
             if (trackPointBuffer[currentlyClosestBuffer].size()== TRACKBUFFER)
                 trackPointBuffer[currentlyClosestBuffer].pop_back();
-            //insert new value into buffer
+
             trackPointBuffer[currentlyClosestBuffer].insert(trackPointBuffer[currentlyClosestBuffer].begin(),trackPoint);
         }
     }
@@ -303,6 +293,7 @@ void testApp::draw(){
     else
         ocvDiff.draw(800,500);*/
 
+    //draw kinect webcam
     ofPushMatrix();
         ofTranslate(20,70);
         ofScale(0.75,0.75,0.75);
@@ -311,7 +302,7 @@ void testApp::draw(){
 
     //draw the mask after postProduction
     ofPushMatrix();
-        ofTranslate(480+520+10,70); //TODO variable for positions
+        ofTranslate(480+520+10,70); //TODO variables for positions
         ofScale(0.50,0.50,0.50);
         ocvDiff.draw(0,0);
     ofPopMatrix();
@@ -325,22 +316,33 @@ void testApp::draw(){
 
 
     //calculate Buffered value
-    //Vector3f trackPoint[MAXPUPPE];
+    //Vector3f trackPoint[NMAXBLOBS];
 
-    //for all trackPoints
-    /*for (int i=0;i<MAXPUPPE;i++){
-        //add up all Buffered values
+    //To make the tracking more fluid we take the average
+    //of each tracked point from the trackPointBuffer
+    for (int i=0;i<NMAXBLOBS;i++){
         for (int b=0;b<TRACKBUFFER;b++){
-            trackPoint[i]+=trackPointBuffer[i][b]/float(TRACKBUFFER);
+            //trackPoint[i]+=trackPointBuffer[i][b]/float(TRACKBUFFER);//warum sum(vect_i/num_tot)?
+            trackPoint[i]+=trackPointBuffer[i][b];
+            //trackPoint[i] = trackPointBuffer[i][b];
         }
+        trackPoint[i]=trackPoint[i]/float(TRACKBUFFER);
     }
 
-    for (int i=0;i<MAXPUPPE;i++){
-        ofCircle(trackPoint[i].x+1000,trackPoint[i].y,10);
-        char buf[5];
-        sprintf(buf,"%d",i);
-        ofDrawBitmapString(buf,trackPoint[i].x+1000,trackPoint[i].y,10);
-    }*/
+    //we draw the "id" number. It follow the tracked Blob
+    //TODO: maybe too much iteration... or what made the tracking so slow?
+    ofPushMatrix();
+        ofTranslate(520,70);
+        ofScale(0.75,0.75,0.75);
+
+        for (int i=0;i<NMAXBLOBS;i++){
+            //ofCircle(trackPoint[i].x,trackPoint[i].y,10);
+            char buf[5];
+            sprintf(buf,"%d",i);
+            ofDrawBitmapString(buf,trackPoint[i].x,trackPoint[i].y,25);
+        }
+
+    ofPopMatrix();
 
     /*ofPushMatrix();
         ofTranslate(100,100);
@@ -358,7 +360,7 @@ void testApp::draw(){
             //ofSetColor(1.0,0.0,0.0,0.5);
             //kinect.drawDepth(0,0);
 
-            for (int i=0;i<MAXPUPPE;i++){
+            for (int i=0;i<NMAXBLOBS;i++){
                 ofPushMatrix();
                 ofTranslate(trackPoint[i].x,trackPoint[i].y);
                 ofSetHexColor(0x00ffff);
@@ -371,8 +373,8 @@ void testApp::draw(){
 
     ofPopMatrix();*/
 
-
-    /*for (int i=0;i<MAXPUPPE;i++){
+/*
+    for (int i=0;i<NMAXBLOBS;i++){
 
         ofPushMatrix();
             ofTranslate(100,100);
@@ -394,16 +396,16 @@ void testApp::draw(){
             rgbaFbo.begin();
                 //drawFill( (mX/128)*128,(mY/128)*128);
                 trackPoint[i].x*=4.0;
-                trackPoint[i].y*=3.0;
+                trackPoint[i].y*=3.0;*/
                 //drawFill( trackPoint[i].x, trackPoint[i].y );
                 //draw connections
-                if (connectors[i]->color==Vector4f(0.5,0,0,1)){
-                    for (int j=0;j<MAXPUPPE;j++){
+                /*if (connectors[i]->color==Vector4f(0.5,0,0,1)){
+                    for (int j=0;j<NMAXBLOBS;j++){
                         if (connected[j]->color==Vector4f(0,0.5,0,1)){
                             drawConnect(trackPoint[i].x, trackPoint[i].y,trackPoint[j].x, trackPoint[j].y);
                         }
                     }
-                }
+                }*/
 
 
                 //if (i>0)
@@ -411,20 +413,26 @@ void testApp::draw(){
 
                 //drawFill( (int(trackPoint.x)/128)*128, (int(trackPoint.y)/128)*128 );
 
-                if (bMockup){
+                /*if (bMockup){
                         ofRotate(45);
                     mockup.draw(0,500);
-                }
+                }*/
 
-            rgbaFbo.end();
-    }*/
+            //rgbaFbo.end();
+    //}
 
 
     //ofNoFill();
-    sprintf(valueStr, "erode 1[-]: %i :[+]2", erodeAmount);
+
+    //draw the "textual interface"
+    sprintf(valueStr, "erode a/q  %i", erodeAmount);
     valueNumber.drawString(valueStr, 20,560);
-    sprintf(valueStr, "dilate 3[-]: %i :[+]4", dilateAmount);
+    sprintf(valueStr, "dilate s/w  %i", dilateAmount);
     valueNumber.drawString(valueStr, 20,600);
+    sprintf(valueStr, "threshhold d/e  %i", threshold);
+    valueNumber.drawString(valueStr, 20,640);
+    sprintf(valueStr, "minArea Blob f/r  %i", minDimBlob);
+    valueNumber.drawString(valueStr, 20,680);
 
 }
 
@@ -435,7 +443,7 @@ void testApp::draw(){
 
     //color toggle
 
-    for (int i=0;i<MAXPUPPE;i++){
+    for (int i=0;i<NMAXBLOBS;i++){
         if (other==connected[i]){
             if (connected[i]->color==Vector4f(0,0.5,0,1)){
                 connected[i]->color=Vector4f(0,0,0.5,1);
@@ -447,7 +455,7 @@ void testApp::draw(){
 
     //color toggle
 
-    for (int i=0;i<MAXPUPPE;i++){
+    for (int i=0;i<NMAXBLOBS;i++){
         if (other==connectors[i]){
             if (connectors[i]->color==Vector4f(0.5,0,0,1)){
                 connectors[i]->color=Vector4f(0.5,0.5,0,1);
@@ -481,10 +489,10 @@ void testApp::keyReleased(int key){
     }
 
     //Reset trackPointBuffers
-    if (key=='r'){
+    if (key=='z'){
         cout << "resetting trackPoint Buffer" << endl;
         //for each Puppet potentially to be tracked
-        for (int i=0;i<MAXPUPPE;i++){
+        for (int i=0;i<NMAXBLOBS;i++){
             trackPointBuffer[i].clear();
             //set up a buffer as big as TRACKBUFFER
             for (int b=0;b<TRACKBUFFER;b++){
@@ -494,21 +502,33 @@ void testApp::keyReleased(int key){
 
     }
 
-    if (key=='4'){
+    if (key=='w'){
         dilateAmount++;
         postProcessMask();
     }
-    if (key=='2'){
+    if (key=='q'){
         erodeAmount++;
         postProcessMask();
     }
-    if (key=='3'){
+    if (key=='s'){
         dilateAmount--;
         postProcessMask();
     }
-    if (key=='1'){
+    if (key=='a'){
         erodeAmount--;
         postProcessMask();
+    }
+    if (key=='e'){
+        threshold++;
+    }
+        if (key=='d'){
+        threshold--;
+    }
+    if (key=='f'){
+        minDimBlob-=100;
+    }
+        if (key=='r'){
+        minDimBlob+=100;
     }
 
 }

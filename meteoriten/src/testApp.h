@@ -20,7 +20,7 @@
 //#define SCREENRESY 1080
 #define SCREENRESX 1366
 #define SCREENRESY 768
-#define MAXPUPPE 10
+#define NMAXBLOBS 10
 #define TRACKBUFFER 30
 
 struct actorID;
@@ -115,6 +115,8 @@ class testApp : public ofBaseApp, public Actor{
         ofxCvGrayscaleImage ocvDiff;
 
         ofxCvContourFinder contourFinder;
+        int minDimBlob;
+        int maxDimBlob;
 
         //ofVideoPlayer   mockup;
 
@@ -140,8 +142,8 @@ class testApp : public ofBaseApp, public Actor{
         bool bAccumulateMask;
         bool bMockup;
 
-        //Vector3f trackPoint[MAXPUPPE];
-        vector<Vector3f> trackPointBuffer[MAXPUPPE];
+        Vector3f trackPoint[NMAXBLOBS];
+        vector<Vector3f> trackPointBuffer[NMAXBLOBS];
         /*vector<BasicButton*>  connectors;
         vector<BasicButton*>  connected;*/
 
