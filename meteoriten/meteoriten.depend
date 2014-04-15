@@ -2576,7 +2576,7 @@
 	"testApp.h"
 	"ofAppGlutWindow.h"
 
-1397351996 c:\of_v0.8.0_win_cb_release\apps\dronenmaerchen\meteoriten\src\testapp.h
+1397594914 c:\of_v0.8.0_win_cb_release\apps\dronenmaerchen\meteoriten\src\testapp.h
 	"ofxOpenCv.h"
 	"ofxKinect.h"
 	"ofMain.h"
@@ -2586,6 +2586,7 @@
 	"textInputButton.h"
 	"assignButton.h"
 	"sliderButton.h"
+	"trackBlobSimple.h"
 
 1396700419 c:\of_v0.8.0_win_cb_release\addons\msbofcore\msbofcore.h
 	"renderer.h"
@@ -2598,6 +2599,13 @@
 	"ofTypes.h"
 	"ofPixels.h"
 
-1397427337 source:c:\of_v0.8.0_win_cb_release\apps\dronenmaerchen\meteoriten\src\testapp.cpp
+1397594992 source:c:\of_v0.8.0_win_cb_release\apps\dronenmaerchen\meteoriten\src\testapp.cpp
 	"testApp.h"
+
+1397594914 c:\of_v0.8.0_win_cb_release\apps\dronenmaerchen\meteoriten\src\trackblobsimple.h
+	<vector>
+	"ofxOpenCv.h"
+
+1397597598 source:c:\of_v0.8.0_win_cb_release\apps\dronenmaerchen\meteoriten\src\trackblobsimple.cpp
+	"trackBlobSimple.h"
 

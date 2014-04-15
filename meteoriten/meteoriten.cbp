@@ -777,6 +777,10 @@
 		<Unit filename="src/testApp.h">
 			<Option virtualFolder="src" />
 		</Unit>
+		<Unit filename="src/trackBlobSimple.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/trackBlobSimple.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />

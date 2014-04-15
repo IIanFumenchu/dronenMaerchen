@@ -19,7 +19,7 @@ void testApp::setup(){
     mY=0;
 
     threshold=40;
-    trackDistance=100;
+    //trackDistance=100;
     imageBuffer=8;
 
     lineWidth=4.0;
@@ -54,17 +54,20 @@ void testApp::setup(){
     pixelBufferTwo= new unsigned char[640*480];
     pixelBufferThree= new unsigned char[640*480];
 
-    //set up tracking buffers
+    /*//set up tracking buffers
     //for each Puppet potentially to be tracked
     for (int i=0;i<NMAXBLOBS;i++){
         //set up a buffer as big as BUFFER
         for (int b=0;b<TRACKBUFFER;b++){// ???
             trackPointBuffer [i].push_back(Vector3f(0,0,0));
         }
-    }
+    }*/
 
     minDimBlob = 100;
     maxDimBlob = 200000;
+
+    trackingBlobs.setup(ocvImage,minDimBlob,maxDimBlob,NMAXBLOBS,TRACKBUFFER,false,true);
+
     //ofSetFrameRate(25);
 
 
@@ -111,15 +114,15 @@ void testApp::update(){
 
     //do all the stuff all the time
     applyMask();
-    trackPoints();
+    ocvImage.threshold(threshold,false); //TODO for blob detection is better grayscale or B/W?
+    //trackPoints();
+    trackingBlobs.update();
 
 }
 
-void testApp::trackPoints(){
+/*void testApp::trackPoints(){
 
     Vector3f trackPoint;
-
-    ocvImage.threshold(threshold,false); //TODO for blob detection is better grayscale or B/W?
 
     contourFinder.findContours(ocvImage,minDimBlob,maxDimBlob,NMAXBLOBS,false,true);
 
@@ -178,6 +181,7 @@ void testApp::trackPoints(){
         }
     }
 }
+*/
 
 void testApp::applyMask(){
 
@@ -281,7 +285,7 @@ void testApp::draw(){
         ofTranslate(520,70);
         ofScale(0.75,0.75,0.75);
         ocvImage.draw(0,0);
-        contourFinder.draw();
+        trackingBlobs.drawCountornFinder();
     ofPopMatrix();
 
             //was passiert hier eigentlich?
@@ -320,14 +324,14 @@ void testApp::draw(){
 
     //To make the tracking more fluid we take the average
     //of each tracked point from the trackPointBuffer
-    for (int i=0;i<NMAXBLOBS;i++){
+    /*for (int i=0;i<NMAXBLOBS;i++){
         for (int b=0;b<TRACKBUFFER;b++){
             //trackPoint[i]+=trackPointBuffer[i][b]/float(TRACKBUFFER);//warum sum(vect_i/num_tot)?
             trackPoint[i]+=trackPointBuffer[i][b];
             //trackPoint[i] = trackPointBuffer[i][b];
         }
         trackPoint[i]=trackPoint[i]/float(TRACKBUFFER);
-    }
+    }*/
 
     //we draw the "id" number. It follow the tracked Blob
     //TODO: maybe too much iteration... or what made the tracking so slow?
@@ -335,12 +339,15 @@ void testApp::draw(){
         ofTranslate(520,70);
         ofScale(0.75,0.75,0.75);
 
-        for (int i=0;i<NMAXBLOBS;i++){
+        trackingBlobs.averageHistory();
+        trackingBlobs.drawIDs();
+
+        /*for (int i=0;i<NMAXBLOBS;i++){
             //ofCircle(trackPoint[i].x,trackPoint[i].y,10);
             char buf[5];
             sprintf(buf,"%d",i);
             ofDrawBitmapString(buf,trackPoint[i].x,trackPoint[i].y,25);
-        }
+        }*/
 
     ofPopMatrix();
 
@@ -490,7 +497,7 @@ void testApp::keyReleased(int key){
 
     //Reset trackPointBuffers
     if (key=='z'){
-        cout << "resetting trackPoint Buffer" << endl;
+        /*cout << "resetting trackPoint Buffer" << endl;
         //for each Puppet potentially to be tracked
         for (int i=0;i<NMAXBLOBS;i++){
             trackPointBuffer[i].clear();
@@ -498,7 +505,8 @@ void testApp::keyReleased(int key){
             for (int b=0;b<TRACKBUFFER;b++){
                 trackPointBuffer[i].push_back(Vector3f(0,0,0));
             }
-        }
+        }*/
+        trackingBlobs.resetBuffer();
 
     }
 

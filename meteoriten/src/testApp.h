@@ -12,6 +12,8 @@
 #include "assignButton.h"
 #include "sliderButton.h"
 
+#include "trackBlobSimple.h"
+
 
 
 // Uncomment this to use a camera instead of a video file
@@ -48,7 +50,7 @@ class testApp : public ofBaseApp, public Actor{
 		//void checkConnections(Actor* other);
         //void loadSettings();
 
-        void trackPoints();
+        //void trackPoints();
         void applyMask();
         //void accumulateImage();
         //void accumulateMask();
@@ -114,7 +116,7 @@ class testApp : public ofBaseApp, public Actor{
         ofxCvGrayscaleImage ocvMask;
         ofxCvGrayscaleImage ocvDiff;
 
-        ofxCvContourFinder contourFinder;
+        //ofxCvContourFinder contourFinder;
         int minDimBlob;
         int maxDimBlob;
 
@@ -127,7 +129,7 @@ class testApp : public ofBaseApp, public Actor{
         int threshold;
         float lineWidth;
         float rectSize;
-        float trackDistance;
+        //float trackDistance;
 
         int dilateAmount;
         int erodeAmount;
@@ -142,15 +144,15 @@ class testApp : public ofBaseApp, public Actor{
         bool bAccumulateMask;
         bool bMockup;
 
-        Vector3f trackPoint[NMAXBLOBS];
-        vector<Vector3f> trackPointBuffer[NMAXBLOBS];
+        //Vector3f trackPoint[NMAXBLOBS];
+        //vector<Vector3f> trackPointBuffer[NMAXBLOBS];
         /*vector<BasicButton*>  connectors;
         vector<BasicButton*>  connected;*/
 
         ofTrueTypeFont valueNumber;
         char valueStr[255]; // an array of chars
 
-
+        TrackBlobSimple trackingBlobs;
 
         //SliderButton* slBut;
 };
