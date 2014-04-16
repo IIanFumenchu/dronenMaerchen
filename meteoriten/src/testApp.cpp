@@ -63,8 +63,13 @@ void testApp::setup(){
         }
     }
 
+//    trackPointBufferColor (NMAXBLOBS, ' ');
+
     minDimBlob = 100;
     maxDimBlob = 200000;
+
+    minLimitTarget = 40; //0-256
+    maxLimitTarget = 42;
     //ofSetFrameRate(25);
 
 
@@ -78,7 +83,7 @@ void testApp::setup(){
 
     rgbaFbo.end();
 
-    valueNumber.loadFont("verdana.ttf", 25);
+    valueNumber.loadFont("verdana.ttf", 20);
 
 
     //stage simulation
@@ -118,8 +123,12 @@ void testApp::update(){
 void testApp::trackPoints(){
 
     Vector3f trackPoint;
+    unsigned char pixelColor;
+    unsigned char* pixelColorTemp;
 
-    ocvImage.threshold(threshold,false); //TODO for blob detection is better grayscale or B/W?
+    ocvDeepImage = ocvImage;
+
+    ocvDeepImage.threshold(threshold,false); //TODO for blob detection is better grayscale or B/W?
 
     contourFinder.findContours(ocvImage,minDimBlob,maxDimBlob,NMAXBLOBS,false,true);
 
@@ -140,6 +149,13 @@ void testApp::trackPoints(){
 
         trackPoint.x=contourFinder.blobs[i].pts[myMin].x;
         trackPoint.y=contourFinder.blobs[i].pts[myMin].y;
+
+        //FROM OPENCV: cvmGet(M,i,j) to access elements i,j from a M matrix
+        // element: briConLutMatrix = cvCreateMat(1,256,CV_8UC1); from ofxCvGrayscaleImage
+        //pixelColor = cvmGet(ocvImage.briConLutMatrix, 1, (trackPoint.y*ocvImage.getWidth()+trackPoint.x));
+
+         pixelColorTemp = ocvImage.getPixels();
+         pixelColor = pixelColorTemp[(int)trackPoint.y*(int)ocvImage.getWidth()+(int)trackPoint.x];
 
         //if we have buffered values, delete the oldest one
         //now we must associate the currently tracked point with the closest point we already have
@@ -175,9 +191,42 @@ void testApp::trackPoints(){
                 trackPointBuffer[currentlyClosestBuffer].pop_back();
 
             trackPointBuffer[currentlyClosestBuffer].insert(trackPointBuffer[currentlyClosestBuffer].begin(),trackPoint);
+            trackPointBufferColor[currentlyClosestBuffer] = pixelColor;
         }
     }
 }
+
+/*void testApp::checkInterestZone(){
+
+    Vector3f trackPoint;
+    vector<Vector3f> caught(NMAXBLOBS, Vector3f(0,0,0));
+    int distBlob2ThreshBlob = 10;
+
+    contourFinder.findContours(ocvDeepImage,minDimBlob,maxDimBlob,NMAXBLOBS,false,true);
+
+    for(int i = 0; i < contourFinder.nBlobs; i++) {
+
+        //find the lowest point of each Blob
+        float maxim=0;  //maximum y
+        int myMin=0;    //point that is lowest in y
+
+        for (int p=0;p<contourFinder.blobs[i].nPts;p++){
+            if (contourFinder.blobs[i].pts[p].y<maxim){
+                    myMin=p;
+                    maxim=contourFinder.blobs[i].pts[p].y;
+            }
+        }
+
+        trackPoint.x=contourFinder.blobs[i].pts[myMin].x;
+        trackPoint.y=contourFinder.blobs[i].pts[myMin].y;
+
+
+        for(int i=0;i<NMAXBLOBS;i++){
+            trackPointBuffer[i][0]
+        }
+    }
+}
+*/
 
 void testApp::applyMask(){
 
@@ -344,6 +393,21 @@ void testApp::draw(){
 
     ofPopMatrix();
 
+    for(int i; i<NMAXBLOBS; i++){
+        char buf[5];
+        sprintf(buf,"%d",trackPointBufferColor[i]);
+        ofDrawBitmapString(buf,trackPoint[i].x,trackPoint[i].y,50);
+
+        if(trackPointBufferColor[i]>minLimitTarget && trackPointBufferColor[i]<maxLimitTarget){
+            //char buf[5];
+            sprintf(buf,"%d",trackPointBufferColor[i]);
+            ofDrawBitmapString(buf,trackPoint[i].x,trackPoint[i].y,50);
+            ofSetColor(255,255,255);
+            ofFill();
+            ofCircle(trackPoint[i].x,trackPoint[i].y,100);
+        }
+
+    }
     /*ofPushMatrix();
         ofTranslate(100,100);
         ofScale(0.5,0.5,0.5);
@@ -426,13 +490,17 @@ void testApp::draw(){
 
     //draw the "textual interface"
     sprintf(valueStr, "erode a/q  %i", erodeAmount);
-    valueNumber.drawString(valueStr, 20,560);
+    valueNumber.drawString(valueStr, 20,550);
     sprintf(valueStr, "dilate s/w  %i", dilateAmount);
-    valueNumber.drawString(valueStr, 20,600);
+    valueNumber.drawString(valueStr, 20,575);
     sprintf(valueStr, "threshhold d/e  %i", threshold);
-    valueNumber.drawString(valueStr, 20,640);
+    valueNumber.drawString(valueStr, 20,600);
     sprintf(valueStr, "minArea Blob f/r  %i", minDimBlob);
-    valueNumber.drawString(valueStr, 20,680);
+    valueNumber.drawString(valueStr, 20,625);
+    sprintf(valueStr, "minLimTarget k/i  %i", minLimitTarget);
+    valueNumber.drawString(valueStr, 20,650);
+    sprintf(valueStr, "maxLimTarget l/o  %i", maxLimitTarget);
+    valueNumber.drawString(valueStr, 20,675);
 
 }
 
@@ -527,9 +595,24 @@ void testApp::keyReleased(int key){
     if (key=='f'){
         minDimBlob-=100;
     }
-        if (key=='r'){
+    if (key=='r'){
         minDimBlob+=100;
     }
+
+    if(key=='o'){
+           minLimitTarget++;
+    maxLimitTarget++;
+    }
+      if(key=='l'){
+    maxLimitTarget--;
+    }
+      if(key=='i'){
+           minLimitTarget++;
+    }
+      if(key=='k'){
+           minLimitTarget--;
+    }
+
 
 }
 

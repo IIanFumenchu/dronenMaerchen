@@ -21,7 +21,7 @@
 #define SCREENRESX 1366
 #define SCREENRESY 768
 #define NMAXBLOBS 10
-#define TRACKBUFFER 30
+#define TRACKBUFFER 10
 
 struct actorID;
 struct memberID;
@@ -113,10 +113,14 @@ class testApp : public ofBaseApp, public Actor{
         ofxCvGrayscaleImage ocvImage;
         ofxCvGrayscaleImage ocvMask;
         ofxCvGrayscaleImage ocvDiff;
+        ofxCvGrayscaleImage ocvDeepImage;
 
         ofxCvContourFinder contourFinder;
         int minDimBlob;
         int maxDimBlob;
+
+        int minLimitTarget;
+        int maxLimitTarget;
 
         //ofVideoPlayer   mockup;
 
@@ -144,6 +148,7 @@ class testApp : public ofBaseApp, public Actor{
 
         Vector3f trackPoint[NMAXBLOBS];
         vector<Vector3f> trackPointBuffer[NMAXBLOBS];
+        unsigned char trackPointBufferColor[NMAXBLOBS];
         /*vector<BasicButton*>  connectors;
         vector<BasicButton*>  connected;*/
 
