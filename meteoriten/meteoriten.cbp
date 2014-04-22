@@ -6,7 +6,7 @@
 		<Option makefile="makefile" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="src\;addons\ofxOpenCv\libs\opencv\include\opencv\;addons\ofxOsc\libs\oscpack\src\osc\;addons\ofxOpenCv\libs\opencv\include\opencv2\video\;addons\ofxOpenCv\libs\opencv\include\opencv2\flann\;addons\ofxOpenCv\libs\opencv\include\opencv2\calib3d\;addons\ofxThreadedImageLoader\src\;addons\ofxOsc\src\;addons\ofxOpenCv\libs\opencv\include\opencv2\contrib\;addons\ofxOpenCv\libs\opencv\include\opencv2\core\;addons\ofxOpenCv\libs\opencv\include\opencv2\gpu\;addons\ofxOpenCv\src\;addons\ofxOpenCv\libs\opencv\include\opencv2\features2d\;addons\ofxOsc\libs\oscpack\src\ip\;addons\ofxOpenCv\libs\opencv\include\opencv2\highgui\;addons\ofxOpenCv\libs\opencv\include\opencv2\imgproc\;addons\ofxOsc\libs\oscpack\src\ip\posix\;addons\ofxOpenCv\libs\opencv\include\opencv2\legacy\;addons\ofxOsc\libs\oscpack\src\ip\win32\;addons\ofxOpenCv\libs\opencv\include\opencv2\objdetect\;addons\ofxOpenCv\libs\opencv\include\opencv2\ts\;addons\ofxOpenCv\libs\opencv\include\opencv2\ml\;addons\ofxOpenCv\libs\opencv\include\opencv2\;" />
+		<Option virtualFolders="src\;addons\ofxOpenCv\libs\opencv\include\opencv\;addons\ofxOsc\libs\oscpack\src\osc\;addons\ofxOpenCv\libs\opencv\include\opencv2\video\;addons\ofxOpenCv\libs\opencv\include\opencv2\flann\;addons\ofxOpenCv\libs\opencv\include\opencv2\calib3d\;addons\ofxThreadedImageLoader\src\;addons\ofxOsc\src\;addons\ofxOpenCv\libs\opencv\include\opencv2\contrib\;addons\ofxOpenCv\libs\opencv\include\opencv2\core\;addons\ofxOpenCv\libs\opencv\include\opencv2\gpu\;addons\ofxOpenCv\src\;addons\ofxOpenCv\libs\opencv\include\opencv2\features2d\;addons\ofxOsc\libs\oscpack\src\ip\;addons\ofxOpenCv\libs\opencv\include\opencv2\highgui\;addons\ofxOpenCv\libs\opencv\include\opencv2\imgproc\;addons\ofxOsc\libs\oscpack\src\ip\posix\;addons\ofxOpenCv\libs\opencv\include\opencv2\legacy\;addons\ofxOsc\libs\oscpack\src\ip\win32\;addons\ofxOpenCv\libs\opencv\include\opencv2\objdetect\;addons\ofxOpenCv\libs\opencv\include\opencv2\ts\;addons\ofxOpenCv\libs\opencv\include\opencv2\ml\;addons\ofxOpenCv\libs\opencv\include\opencv2\;addons\ofxGui\;" />
 		<Build>
 			<Target title="release">
 				<Option output="bin/$(PROJECT_NAME)" prefix_auto="1" extension_auto="1" />
@@ -107,6 +107,7 @@
 			<Add directory="../../../addons/msbOFCore/msbButtons" />
 			<Add directory="../../../addons/msbOFCore/vMath" />
 			<Add directory="../../../addons/msbOFCore/tinyxml" />
+			<Add directory="../../../addons/ofxGui/src" />
 		</Compiler>
 		<Linker>
 			<Add library="..\..\..\libs\FreeImage\lib\win_cb\FreeImage.lib" />
@@ -233,6 +234,23 @@
 		<Unit filename="../../../addons/msbOFCore/tinyxml/tinyxmlparser.cpp" />
 		<Unit filename="../../../addons/msbOFCore/vMath/vmath.cpp" />
 		<Unit filename="../../../addons/msbOFCore/vMath/vmath.h" />
+		<Unit filename="../../../addons/ofxGui/src/ofxBaseGui.cpp" />
+		<Unit filename="../../../addons/ofxGui/src/ofxBaseGui.h" />
+		<Unit filename="../../../addons/ofxGui/src/ofxButton.cpp" />
+		<Unit filename="../../../addons/ofxGui/src/ofxButton.h" />
+		<Unit filename="../../../addons/ofxGui/src/ofxGui.h" />
+		<Unit filename="../../../addons/ofxGui/src/ofxGuiGroup.cpp" />
+		<Unit filename="../../../addons/ofxGui/src/ofxGuiGroup.h" />
+		<Unit filename="../../../addons/ofxGui/src/ofxLabel.cpp" />
+		<Unit filename="../../../addons/ofxGui/src/ofxLabel.h" />
+		<Unit filename="../../../addons/ofxGui/src/ofxPanel.cpp" />
+		<Unit filename="../../../addons/ofxGui/src/ofxPanel.h" />
+		<Unit filename="../../../addons/ofxGui/src/ofxSlider.cpp" />
+		<Unit filename="../../../addons/ofxGui/src/ofxSlider.h" />
+		<Unit filename="../../../addons/ofxGui/src/ofxSliderGroup.cpp" />
+		<Unit filename="../../../addons/ofxGui/src/ofxSliderGroup.h" />
+		<Unit filename="../../../addons/ofxGui/src/ofxToggle.cpp" />
+		<Unit filename="../../../addons/ofxGui/src/ofxToggle.h" />
 		<Unit filename="../../../addons/ofxKinectOpenNI/NITE/Include/XnCommon.h" />
 		<Unit filename="../../../addons/ofxKinectOpenNI/NITE/Include/XnV3DVector.h" />
 		<Unit filename="../../../addons/ofxKinectOpenNI/NITE/Include/XnVActivationMessage.h" />

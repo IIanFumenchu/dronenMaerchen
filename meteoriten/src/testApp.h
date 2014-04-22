@@ -3,6 +3,7 @@
 
 #include "ofxOpenCv.h"
 #include "ofxKinect.h"
+#include "ofxGui.h"
 #include "ofMain.h"
 #include "msbOFCore.h"
 #include "actor.h"
@@ -116,11 +117,11 @@ class testApp : public ofBaseApp, public Actor{
         ofxCvGrayscaleImage ocvDeepImage;
 
         ofxCvContourFinder contourFinder;
-        int minDimBlob;
+        /*int minDimBlob;
         int maxDimBlob;
 
         int minLimitTarget;
-        int maxLimitTarget;
+        int maxLimitTarget;*/
 
         //ofVideoPlayer   mockup;
 
@@ -128,13 +129,13 @@ class testApp : public ofBaseApp, public Actor{
         unsigned char*               pixelBufferTwo;
         unsigned char*               pixelBufferThree;
 
-        int threshold;
+        //int threshold;
         float lineWidth;
         float rectSize;
         float trackDistance;
 
-        int dilateAmount;
-        int erodeAmount;
+        //int dilateAmount;
+        //int erodeAmount;
         int blurAmount;
 
         int imageBuffer;
@@ -155,6 +156,17 @@ class testApp : public ofBaseApp, public Actor{
         ofTrueTypeFont valueNumber;
         char valueStr[255]; // an array of chars
 
+        void refreshPostProcessMask(int & placeholder);
+
+        ofxIntSlider erodeAmount;
+        ofxIntSlider dilateAmount;
+        ofxIntSlider threshold;
+        ofxIntSlider minDimBlob;
+        ofxIntSlider maxDimBlob;
+        ofxIntSlider minLimitTarget;
+        ofxIntSlider maxLimitTarget;
+
+        ofxPanel gui;
 
 
         //SliderButton* slBut;

@@ -24,8 +24,8 @@ void testApp::setup(){
 
     lineWidth=4.0;
 
-    erodeAmount=0;
-    dilateAmount=0;
+    //erodeAmount=0;
+    //dilateAmount=0;
     blurAmount=0;
 
     selectedPoint=0;
@@ -65,11 +65,11 @@ void testApp::setup(){
 
 //    trackPointBufferColor (NMAXBLOBS, ' ');
 
-    minDimBlob = 100;
-    maxDimBlob = 200000;
+    //minDimBlob = 100;
+    //maxDimBlob = 200000;
 
-    minLimitTarget = 40; //0-256
-    maxLimitTarget = 42;
+    //minLimitTarget = 40; //0-256
+    //maxLimitTarget = 42;
     //ofSetFrameRate(25);
 
 
@@ -84,6 +84,23 @@ void testApp::setup(){
     rgbaFbo.end();
 
     valueNumber.loadFont("verdana.ttf", 20);
+
+
+
+
+    gui.setup();
+    gui.add(erodeAmount.setup( "erode", 0, 0, 50 ));
+    gui.add(dilateAmount.setup( "dilate", 0, 0, 50 ));
+    gui.add(threshold.setup( "threshold", 0, 0, 100 ));
+    gui.add(minDimBlob.setup( "minDimBlob", 400, 0, 1000 ));
+    gui.add(maxDimBlob.setup( "maxDimBlob", 2000000, 0, 2000000 ));
+    gui.add(minLimitTarget.setup( "minLimitTarget", 40, 0, 2000 ));
+    gui.add(maxLimitTarget.setup( "maxLimitTarget", 45, 0, 2000 ));
+
+
+    //erodeAmount.addListener(this, &testApp::refreshPostProcessMask);
+    //dilateAmount.addListener(this, &testApp::refreshPostProcessMask);
+
 
 
     //stage simulation
@@ -118,6 +135,8 @@ void testApp::update(){
     applyMask();
     trackPoints();
 
+    //if(erodeAmount.mouseReleased(ofMouseEventArgs args)){postProcessMask();}
+
 }
 
 void testApp::trackPoints(){
@@ -126,9 +145,9 @@ void testApp::trackPoints(){
     unsigned char pixelColor;
     unsigned char* pixelColorTemp;
 
-    ocvDeepImage = ocvImage;
+    /*ocvDeepImage = ocvImage;
 
-    ocvDeepImage.threshold(threshold,false); //TODO for blob detection is better grayscale or B/W?
+    ocvDeepImage.threshold(threshold,false); //TODO for blob detection is better grayscale or B/W?*/
 
     contourFinder.findContours(ocvImage,minDimBlob,maxDimBlob,NMAXBLOBS,false,true);
 
@@ -393,21 +412,28 @@ void testApp::draw(){
 
     ofPopMatrix();
 
-    for(int i; i<NMAXBLOBS; i++){
-        char buf[5];
-        sprintf(buf,"%d",trackPointBufferColor[i]);
-        ofDrawBitmapString(buf,trackPoint[i].x,trackPoint[i].y,50);
 
-        if(trackPointBufferColor[i]>minLimitTarget && trackPointBufferColor[i]<maxLimitTarget){
-            //char buf[5];
+    ofPushMatrix();
+        ofTranslate(20,70);
+        ofScale(0.75,0.75,0.75);
+
+        for(int i; i<NMAXBLOBS; i++){
+            char buf[5];
             sprintf(buf,"%d",trackPointBufferColor[i]);
             ofDrawBitmapString(buf,trackPoint[i].x,trackPoint[i].y,50);
-            ofSetColor(255,255,255);
-            ofFill();
-            ofCircle(trackPoint[i].x,trackPoint[i].y,100);
+
+            if(trackPointBufferColor[i]>minLimitTarget && trackPointBufferColor[i]<maxLimitTarget){
+                //char buf[5];
+                sprintf(buf,"%d",trackPointBufferColor[i]);
+                ofDrawBitmapString(buf,trackPoint[i].x,trackPoint[i].y,50);
+                ofSetColor(255,255,255);
+                ofFill();
+                ofCircle(trackPoint[i].x,trackPoint[i].y,100);
+            }
+
         }
 
-    }
+    ofPopMatrix();
     /*ofPushMatrix();
         ofTranslate(100,100);
         ofScale(0.5,0.5,0.5);
@@ -489,18 +515,21 @@ void testApp::draw(){
     //ofNoFill();
 
     //draw the "textual interface"
-    sprintf(valueStr, "erode a/q  %i", erodeAmount);
-    valueNumber.drawString(valueStr, 20,550);
-    sprintf(valueStr, "dilate s/w  %i", dilateAmount);
-    valueNumber.drawString(valueStr, 20,575);
-    sprintf(valueStr, "threshhold d/e  %i", threshold);
+    //sprintf(valueStr, "erode a/q  %i", erodeAmount);
+    //valueNumber.drawString(valueStr, 20,550);
+    //sprintf(valueStr, "dilate s/w  %i", dilateAmount);
+    //valueNumber.drawString(valueStr, 20,575);
+    /*sprintf(valueStr, "threshhold d/e  %i", threshold);
     valueNumber.drawString(valueStr, 20,600);
     sprintf(valueStr, "minArea Blob f/r  %i", minDimBlob);
     valueNumber.drawString(valueStr, 20,625);
     sprintf(valueStr, "minLimTarget k/i  %i", minLimitTarget);
     valueNumber.drawString(valueStr, 20,650);
     sprintf(valueStr, "maxLimTarget l/o  %i", maxLimitTarget);
-    valueNumber.drawString(valueStr, 20,675);
+    valueNumber.drawString(valueStr, 20,675);*/
+
+    //draw gui
+    gui.draw();
 
 }
 
@@ -570,20 +599,20 @@ void testApp::keyReleased(int key){
 
     }
 
-    if (key=='w'){
-        dilateAmount++;
+    /*if (key=='w'){
+        //dilateAmount++;
         postProcessMask();
     }
     if (key=='q'){
-        erodeAmount++;
+        //erodeAmount++;
         postProcessMask();
     }
     if (key=='s'){
-        dilateAmount--;
+        //dilateAmount--;
         postProcessMask();
     }
     if (key=='a'){
-        erodeAmount--;
+        //erodeAmount--;
         postProcessMask();
     }
     if (key=='e'){
@@ -611,7 +640,7 @@ void testApp::keyReleased(int key){
     }
       if(key=='k'){
            minLimitTarget--;
-    }
+    }*/
 
 
 }
@@ -641,6 +670,10 @@ void testApp::windowResized(int w, int h){
 
 //============================================SPECIAL FUNCTIONS
 
+
+void testApp::refreshPostProcessMask(int & placeholder){
+	postProcessMask();
+}
 
 //-----------------------------------------
 void testApp::postProcessMask(){
