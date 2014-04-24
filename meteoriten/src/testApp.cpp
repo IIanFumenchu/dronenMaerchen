@@ -55,13 +55,17 @@ void testApp::setup(){
     pixelBufferThree= new unsigned char[640*480];
 
     //set up tracking buffers
-    //for each Puppet potentially to be tracked
+    //for each Blob potentially to be tracked
     for (int i=0;i<NMAXBLOBS;i++){
         //set up a buffer as big as BUFFER
-        for (int b=0;b<TRACKBUFFER;b++){// ???
+        for (int b=0;b<TRACKBUFFER;b++){
             trackPointBuffer [i].push_back(Vector3f(0,0,0));
         }
+        trackPointActiveBlobs[i] = false;
+        hitted[i] = 0;
     }
+
+
 
 //    trackPointBufferColor (NMAXBLOBS, ' ');
 
@@ -92,10 +96,13 @@ void testApp::setup(){
     gui.add(erodeAmount.setup( "erode", 0, 0, 50 ));
     gui.add(dilateAmount.setup( "dilate", 0, 0, 50 ));
     gui.add(threshold.setup( "threshold", 0, 0, 100 ));
-    gui.add(minDimBlob.setup( "minDimBlob", 400, 0, 1000 ));
-    gui.add(maxDimBlob.setup( "maxDimBlob", 2000000, 0, 2000000 ));
+    gui.add(trackDistance.setup( "trackMaxDistance", 100, 0, 500 ));
+    gui.add(minDimBlob.setup( "minDimBlob", 400, 0, 10000 ));
+    gui.add(maxDimBlob.setup( "maxDimBlob", 307200, 0, 307200 )); //640*480 = kinect resolution
     gui.add(minLimitTarget.setup( "minLimitTarget", 40, 0, 2000 ));
     gui.add(maxLimitTarget.setup( "maxLimitTarget", 45, 0, 2000 ));
+    gui.add(surfaceYpositionMin.setup( "surfaceYpositionMin", 40, 0, 480 )); //kinect y resolution
+    gui.add(surfaceYpositionMax.setup( "surfaceYpositionMax", 45, 0, 480 ));
 
 
     //erodeAmount.addListener(this, &testApp::refreshPostProcessMask);
@@ -144,6 +151,11 @@ void testApp::trackPoints(){
     Vector3f trackPoint;
     unsigned char pixelColor;
     unsigned char* pixelColorTemp;
+
+    //deactiveted all Blobs
+    for(int i=0;i<NMAXBLOBS;i++){
+        trackPointActiveBlobs[i] = false;
+    }
 
     /*ocvDeepImage = ocvImage;
 
@@ -204,6 +216,10 @@ void testApp::trackPoints(){
 
         //if we have found something...
         if (currentlyClosestBuffer>-1){
+
+            //set the current Blob active
+            trackPointActiveBlobs[currentlyClosestBuffer] = true;
+
             //if we have buffered values, delete the oldest one
             //and insert the current Blob position into buffer
             if (trackPointBuffer[currentlyClosestBuffer].size()== TRACKBUFFER)
@@ -213,8 +229,66 @@ void testApp::trackPoints(){
             trackPointBufferColor[currentlyClosestBuffer] = pixelColor;
         }
     }
+
+    //calculate Buffered value
+    //Vector3f trackPointsTemp[NMAXBLOBS];
+
+    //To make the tracking more fluid we take the average
+    //of each tracked point from the trackPointBuffer
+    for (int i=0;i<NMAXBLOBS;i++){
+        for (int b=0;b<TRACKBUFFER;b++){
+            //trackPointsTemp[i]+=trackPointBuffer[i][b]/float(TRACKBUFFER);//warum sum(vect_i/num_tot)?
+            trackPointsTemp[i]+=trackPointBuffer[i][b];
+            //trackPoint[i] = trackPointBuffer[i][b];
+        }
+        trackPointsTemp[i]=trackPointsTemp[i]/float(TRACKBUFFER);
+    }
+
+    calculateWhoHitTheWall();
+
 }
 
+void testApp::clearTrackPointBuffer(){
+
+    for (int i=0;i<NMAXBLOBS;i++){
+
+        trackPointBuffer[i].clear();
+        //set up a buffer as big as TRACKBUFFER
+        for (int b=0;b<TRACKBUFFER;b++){
+            trackPointBuffer[i].push_back(Vector3f(0,0,0));
+        }
+    }
+}
+
+
+void testApp::calculateWhoHitTheWall(){
+
+    for (int i=0;i<NMAXBLOBS;i++){
+
+            //for each Blob on screen...
+            if(trackPointActiveBlobs[i]){
+                if(trackPointsTemp[i].y > surfaceYpositionMin && trackPointsTemp[i].y < surfaceYpositionMax){
+                    // x,y,z rotate to x,z,y
+                    whoHitTheWall[i].x = trackPointsTemp[i].x;
+                    whoHitTheWall[i].y = trackPointBufferColor[i];//total range is 0-256. to convert to the height of screen.
+                    whoHitTheWall[i].z = trackPointsTemp[i].y;
+
+                    hitted[i]++;
+                }
+                else{
+                    whoHitTheWall[i].x = 0;
+                    whoHitTheWall[i].y = 0;
+                    whoHitTheWall[i].z = 0;
+                }
+            }
+            else{
+                whoHitTheWall[i].x = 0;
+                whoHitTheWall[i].y = 0;
+                whoHitTheWall[i].z = 0;
+            }
+    }
+
+}
 /*void testApp::checkInterestZone(){
 
     Vector3f trackPoint;
@@ -383,20 +457,6 @@ void testApp::draw(){
     ofPopMatrix();
 
 
-    //calculate Buffered value
-    //Vector3f trackPoint[NMAXBLOBS];
-
-    //To make the tracking more fluid we take the average
-    //of each tracked point from the trackPointBuffer
-    for (int i=0;i<NMAXBLOBS;i++){
-        for (int b=0;b<TRACKBUFFER;b++){
-            //trackPoint[i]+=trackPointBuffer[i][b]/float(TRACKBUFFER);//warum sum(vect_i/num_tot)?
-            trackPoint[i]+=trackPointBuffer[i][b];
-            //trackPoint[i] = trackPointBuffer[i][b];
-        }
-        trackPoint[i]=trackPoint[i]/float(TRACKBUFFER);
-    }
-
     //we draw the "id" number. It follow the tracked Blob
     //TODO: maybe too much iteration... or what made the tracking so slow?
     ofPushMatrix();
@@ -404,10 +464,14 @@ void testApp::draw(){
         ofScale(0.75,0.75,0.75);
 
         for (int i=0;i<NMAXBLOBS;i++){
-            //ofCircle(trackPoint[i].x,trackPoint[i].y,10);
-            char buf[5];
-            sprintf(buf,"%d",i);
-            ofDrawBitmapString(buf,trackPoint[i].x,trackPoint[i].y,25);
+            //ofCircle(trackPointsTemp[i].x,trackPointsTemp[i].y,10);
+
+            //draw the Blob only if is active
+            if(trackPointActiveBlobs[i]){
+                char buf[10];
+                sprintf(buf,"%d",i);
+                ofDrawBitmapString(buf,trackPointsTemp[i].x,trackPointsTemp[i].y,25);
+            }
         }
 
     ofPopMatrix();
@@ -418,18 +482,18 @@ void testApp::draw(){
         ofScale(0.75,0.75,0.75);
 
         for(int i; i<NMAXBLOBS; i++){
-            char buf[5];
-            sprintf(buf,"%d",trackPointBufferColor[i]);
-            ofDrawBitmapString(buf,trackPoint[i].x,trackPoint[i].y,50);
+            char buf[50];
+            sprintf(buf,"%.1f, %.1f, %d", trackPointsTemp[i].x, trackPointsTemp[i].y, trackPointBufferColor[i]);
+            ofDrawBitmapString(buf,trackPointsTemp[i].x,trackPointsTemp[i].y,50);
 
-            if(trackPointBufferColor[i]>minLimitTarget && trackPointBufferColor[i]<maxLimitTarget){
+            /*if(trackPointBufferColor[i]>minLimitTarget && trackPointBufferColor[i]<maxLimitTarget){
                 //char buf[5];
                 sprintf(buf,"%d",trackPointBufferColor[i]);
-                ofDrawBitmapString(buf,trackPoint[i].x,trackPoint[i].y,50);
+                ofDrawBitmapString(buf,trackPointsTemp[i].x,trackPointsTemp[i].y,50);
                 ofSetColor(255,255,255);
                 ofFill();
-                ofCircle(trackPoint[i].x,trackPoint[i].y,100);
-            }
+                ofCircle(trackPointsTemp[i].x,trackPointsTemp[i].y,100);
+            }*/
 
         }
 
@@ -452,11 +516,11 @@ void testApp::draw(){
 
             for (int i=0;i<NMAXBLOBS;i++){
                 ofPushMatrix();
-                ofTranslate(trackPoint[i].x,trackPoint[i].y);
+                ofTranslate(trackPointsTemp[i].x,trackPointsTemp[i].y);
                 ofSetHexColor(0x00ffff);
                 ofCircle(0,0,10);
                 glGetFloatv(GL_MODELVIEW_MATRIX,cMat);
-                trackPoint[i]=cMat.getTranslation()/(cMat[15]*100.0);
+                trackPointsTemp[i]=cMat.getTranslation()/(cMat[15]*100.0);
                 ofPopMatrix();
             }
             ofPopMatrix();
@@ -472,34 +536,34 @@ void testApp::draw(){
             //ofScale(2.0,2.0,2.0);
             ofSetHexColor(0xffff00);
             //dem magic numbers!
-            trackPoint[i].x*=50;
-            trackPoint[i].x+=1220;
-            trackPoint[i].y*=50;
-            trackPoint[i].y+=220;
+            trackPointsTemp[i].x*=50;
+            trackPointsTemp[i].x+=1220;
+            trackPointsTemp[i].y*=50;
+            trackPointsTemp[i].y+=220;
 
-            trackPoint[i]*=2.0;
+            trackPointsTemp[i]*=2.0;
 
-            ofCircle(trackPoint[i].x,trackPoint[i].y,15);
+            ofCircle(trackPointsTemp[i].x,trackPointsTemp[i].y,15);
 
         ofPopMatrix();
 
             rgbaFbo.begin();
                 //drawFill( (mX/128)*128,(mY/128)*128);
-                trackPoint[i].x*=4.0;
-                trackPoint[i].y*=3.0;*/
-                //drawFill( trackPoint[i].x, trackPoint[i].y );
+                trackPointsTemp[i].x*=4.0;
+                trackPointsTemp[i].y*=3.0;*/
+                //drawFill( trackPointsTemp[i].x, trackPointsTemp[i].y );
                 //draw connections
                 /*if (connectors[i]->color==Vector4f(0.5,0,0,1)){
                     for (int j=0;j<NMAXBLOBS;j++){
                         if (connected[j]->color==Vector4f(0,0.5,0,1)){
-                            drawConnect(trackPoint[i].x, trackPoint[i].y,trackPoint[j].x, trackPoint[j].y);
+                            drawConnect(trackPointsTemp[i].x, trackPointsTemp[i].y,trackPointsTemp[j].x, trackPointsTemp[j].y);
                         }
                     }
                 }*/
 
 
                 //if (i>0)
-                //    ofLine(trackPoint[i].x, trackPoint[i].y,trackPoint[i-1].x, trackPoint[i-1].y  );
+                //    ofLine(trackPointsTemp[i].x, trackPointsTemp[i].y,trackPointsTemp[i-1].x, trackPointsTemp[i-1].y  );
 
                 //drawFill( (int(trackPoint.x)/128)*128, (int(trackPoint.y)/128)*128 );
 
@@ -527,6 +591,9 @@ void testApp::draw(){
     valueNumber.drawString(valueStr, 20,650);
     sprintf(valueStr, "maxLimTarget l/o  %i", maxLimitTarget);
     valueNumber.drawString(valueStr, 20,675);*/
+
+    sprintf(valueStr, "hitted %i %i %i %i", hitted[0], hitted[1], hitted[2], hitted[3]);
+    valueNumber.drawString(valueStr, 20,550);
 
     //draw gui
     gui.draw();
@@ -587,16 +654,10 @@ void testApp::keyReleased(int key){
 
     //Reset trackPointBuffers
     if (key=='z'){
-        cout << "resetting trackPoint Buffer" << endl;
-        //for each Puppet potentially to be tracked
-        for (int i=0;i<NMAXBLOBS;i++){
-            trackPointBuffer[i].clear();
-            //set up a buffer as big as TRACKBUFFER
-            for (int b=0;b<TRACKBUFFER;b++){
-                trackPointBuffer[i].push_back(Vector3f(0,0,0));
-            }
-        }
 
+        cout << "resetting trackPoint Buffer" << endl;
+
+        clearTrackPointBuffer();
     }
 
     /*if (key=='w'){

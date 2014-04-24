@@ -50,6 +50,9 @@ class testApp : public ofBaseApp, public Actor{
         //void loadSettings();
 
         void trackPoints();
+        void clearTrackPointBuffer();
+        void calculateWhoHitTheWall();
+
         void applyMask();
         //void accumulateImage();
         //void accumulateMask();
@@ -132,7 +135,7 @@ class testApp : public ofBaseApp, public Actor{
         //int threshold;
         float lineWidth;
         float rectSize;
-        float trackDistance;
+        //float trackDistance;
 
         //int dilateAmount;
         //int erodeAmount;
@@ -147,11 +150,15 @@ class testApp : public ofBaseApp, public Actor{
         bool bAccumulateMask;
         bool bMockup;
 
-        Vector3f trackPoint[NMAXBLOBS];
+        Vector3f trackPointsTemp[NMAXBLOBS];
         vector<Vector3f> trackPointBuffer[NMAXBLOBS];
         unsigned char trackPointBufferColor[NMAXBLOBS];
+        bool trackPointActiveBlobs[NMAXBLOBS];
+        Vector3f whoHitTheWall[NMAXBLOBS];
+        int hitted[NMAXBLOBS];
         /*vector<BasicButton*>  connectors;
         vector<BasicButton*>  connected;*/
+
 
         ofTrueTypeFont valueNumber;
         char valueStr[255]; // an array of chars
@@ -165,6 +172,9 @@ class testApp : public ofBaseApp, public Actor{
         ofxIntSlider maxDimBlob;
         ofxIntSlider minLimitTarget;
         ofxIntSlider maxLimitTarget;
+        ofxIntSlider surfaceYpositionMin;
+        ofxIntSlider surfaceYpositionMax;
+        ofxFloatSlider trackDistance;
 
         ofxPanel gui;
 
