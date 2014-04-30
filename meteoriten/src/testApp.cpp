@@ -104,10 +104,15 @@ void testApp::setup(){
     gui.add(surfaceYpositionMin.setup( "surfaceYpositionMin", 40, 0, 480 )); //kinect y resolution
     gui.add(surfaceYpositionMax.setup( "surfaceYpositionMax", 45, 0, 480 ));
 
+    gui.add(hitTheWallMaxHeightY.setup( "hitTheWallMaxHeightY", 480, 0, 480 ));
+    gui.add(hitTheWallMaxDeepColor.setup( "hitTheWallMaxDeepColor", 255, 0, 255 ));
+    gui.add(hitTheWallMaxDeepColorBase.setup( "hitTheWallMaxDeepColorBase", 0, 0, 255 ));
 
     //erodeAmount.addListener(this, &testApp::refreshPostProcessMask);
     //dilateAmount.addListener(this, &testApp::refreshPostProcessMask);
-
+    hitTheWallMaxHeightY.addListener(this, &testApp::calculateWhoHitTheWallCostant);
+    hitTheWallMaxDeepColor.addListener(this, &testApp::calculateWhoHitTheWallCostant);
+    hitTheWallMaxDeepColorBase.addListener(this, &testApp::calculateWhoHitTheWallCostant);
 
 
     //stage simulation
@@ -267,7 +272,9 @@ void testApp::calculateWhoHitTheWall(){
 
             //for each Blob on screen...
             if(trackPointActiveBlobs[i]){
-                if(trackPointsTemp[i].y > surfaceYpositionMin && trackPointsTemp[i].y < surfaceYpositionMax){
+                //if(trackPointsTemp[i].y > surfaceYpositionMin && trackPointsTemp[i].y < surfaceYpositionMax){
+                //calculate if the z and y meet on the surface
+                if(int((trackPointBufferColor[i]-hitTheWallMaxDeepColorBase)*hitTheWallConstant) == int(trackPointsTemp[i].y)){
                     // x,y,z rotate to x,z,y
                     whoHitTheWall[i].x = trackPointsTemp[i].x;
                     whoHitTheWall[i].y = trackPointBufferColor[i];//total range is 0-256. to convert to the height of screen.
@@ -288,6 +295,11 @@ void testApp::calculateWhoHitTheWall(){
             }
     }
 
+}
+
+void testApp::calculateWhoHitTheWallCostant(int & placeholder){
+    hitTheWallConstant = float (hitTheWallMaxHeightY) / float (hitTheWallMaxDeepColor-hitTheWallMaxDeepColorBase);
+    cout << "costant " << hitTheWallConstant << endl;
 }
 /*void testApp::checkInterestZone(){
 
@@ -594,6 +606,9 @@ void testApp::draw(){
 
     sprintf(valueStr, "hitted %i %i %i %i", hitted[0], hitted[1], hitted[2], hitted[3]);
     valueNumber.drawString(valueStr, 20,550);
+
+    sprintf(valueStr, "test %i %i %i", trackPointBufferColor[0], int(hitTheWallConstant), int(trackPointsTemp[0].y));
+    valueNumber.drawString(valueStr, 20,575);
 
     //draw gui
     gui.draw();

@@ -1,9 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="release" />
-	<File name="..\..\..\addons\ofxOpenCv\src\ofxCvImage.h" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\..\addons\ofxOpenCv\src\ofxCvImage.cpp" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2439" topLine="0" />
+			<Cursor1 position="26174" topLine="865" />
+		</Cursor>
+	</File>
+	<File name="..\..\..\addons\msbOFCore\actor.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="16135" topLine="630" />
+		</Cursor>
+	</File>
+	<File name="..\..\..\addons\ofxKinectOpenNI\ofxKinect.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2667" topLine="84" />
+		</Cursor>
+	</File>
+	<File name="..\..\..\addons\ofxOpenCv\src\ofxCvGrayscaleImage.h" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="256" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src\testApp.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3930" topLine="150" />
+		</Cursor>
+	</File>
+	<File name="src\testApp.cpp" open="1" top="1" tabpos="1" split="0" active="1" splitpos="572" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="9118" topLine="266" />
+		</Cursor>
+	</File>
+	<File name="src\main.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="360" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="..\..\..\addons\ofxOpenCv\src\ofxCvGrayscaleImage.cpp" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -16,39 +46,9 @@
 			<Cursor1 position="412" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\testApp.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\..\addons\msbOFCore\renderer.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="3930" topLine="150" />
-		</Cursor>
-	</File>
-	<File name="src\testApp.cpp" open="1" top="1" tabpos="1" split="0" active="1" splitpos="572" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2080" topLine="479" />
-		</Cursor>
-	</File>
-	<File name="..\..\..\addons\msbOFCore\actor.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1583" topLine="16" />
-		</Cursor>
-	</File>
-	<File name="..\..\..\addons\ofxKinectOpenNI\ofxKinect.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2667" topLine="84" />
-		</Cursor>
-	</File>
-	<File name="..\..\..\addons\ofxOpenCv\src\ofxCvImage.cpp" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="26174" topLine="865" />
-		</Cursor>
-	</File>
-	<File name="..\..\..\addons\ofxOpenCv\src\ofxCvGrayscaleImage.h" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="256" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\main.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="360" topLine="0" />
+			<Cursor1 position="4763" topLine="306" />
 		</Cursor>
 	</File>
 	<File name="..\..\..\addons\ofxGui\src\ofxSlider.cpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -56,14 +56,14 @@
 			<Cursor1 position="1642" topLine="60" />
 		</Cursor>
 	</File>
-	<File name="..\..\..\addons\msbOFCore\actor.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\..\addons\ofxOpenCv\src\ofxCvImage.h" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="16135" topLine="630" />
+			<Cursor1 position="2439" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="..\..\..\addons\msbOFCore\renderer.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\..\addons\msbOFCore\actor.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="4763" topLine="306" />
+			<Cursor1 position="1583" topLine="16" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

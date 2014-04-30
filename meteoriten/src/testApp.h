@@ -52,6 +52,7 @@ class testApp : public ofBaseApp, public Actor{
         void trackPoints();
         void clearTrackPointBuffer();
         void calculateWhoHitTheWall();
+        void calculateWhoHitTheWallCostant(int & placeholder);
 
         void applyMask();
         //void accumulateImage();
@@ -165,6 +166,8 @@ class testApp : public ofBaseApp, public Actor{
 
         void refreshPostProcessMask(int & placeholder);
 
+        float hitTheWallConstant;
+
         ofxIntSlider erodeAmount;
         ofxIntSlider dilateAmount;
         ofxIntSlider threshold;
@@ -175,6 +178,10 @@ class testApp : public ofBaseApp, public Actor{
         ofxIntSlider surfaceYpositionMin;
         ofxIntSlider surfaceYpositionMax;
         ofxFloatSlider trackDistance;
+
+        ofxIntSlider hitTheWallMaxHeightY;
+        ofxIntSlider hitTheWallMaxDeepColor;
+        ofxIntSlider hitTheWallMaxDeepColorBase;
 
         ofxPanel gui;
 
